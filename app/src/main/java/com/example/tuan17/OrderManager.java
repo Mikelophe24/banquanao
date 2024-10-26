@@ -20,7 +20,7 @@ public class OrderManager {
 
 
     // Thêm đơn hàng mới
-    public long addOrder(String tenKh, String diaChi, String sdt, float tongThanhToan) {
+    public long addOrder( String diaChi, String sdt ,String tenKh, float tongThanhToan) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("tenkh", tenKh);

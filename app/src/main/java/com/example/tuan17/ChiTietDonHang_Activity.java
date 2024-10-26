@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,6 +24,15 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chi_tiet_don_hang);
+        ImageView backButton = findViewById(R.id.back);
+
+        // Thiết lập sự kiện onClick cho ImageView back
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Kết thúc Activity hiện tại và trở về màn hình trước
+            }
+        });
         ImageButton btntimkiem = findViewById(R.id.btntimkiem);
         ImageButton btntrangchu = findViewById(R.id.btntrangchu);
         ImageButton btncard = findViewById(R.id.btncart);

@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import android.app.AlertDialog;
 import java.util.List;
 
 public class GioHang_Activity extends AppCompatActivity {
@@ -24,134 +24,78 @@ public class GioHang_Activity extends AppCompatActivity {
     private Button thanhtoan;
     private Database database;
     private OrderManager orderManager;
-    private TextView txtTongTien; // Khai báo TextView cho tổng tiền
+    private TextView txtTongTien;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gio_hang);
-        ImageButton btntimkiem = findViewById(R.id.btntimkiem);
-        ImageButton btntrangchu = findViewById(R.id.btntrangchu);
-        ImageButton btncard = findViewById(R.id.btncart);
-        ImageButton btndonhang = findViewById(R.id.btndonhang);
-        ImageButton btncanhan = findViewById(R.id.btncanhan);
-        thanhtoan = findViewById(R.id.btnthanhtoan);
+
+        initializeViews();
+        initializeDatabase();
+        setupBackButton();
+        loadUsername();
+        setupNavigationButtons();
+        loadCartData();
+        setupCheckoutButton();
+    }
+
+    private void initializeViews() {
         listView = findViewById(R.id.listtk);
-        TextView textTendn = findViewById(R.id.tendn);
+        txtTongTien = findViewById(R.id.tongtien);
+        thanhtoan = findViewById(R.id.btnthanhtoan);
+    }
 
-        // Lấy tendn từ SharedPreferences
-        SharedPreferences sharedPre = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String tendn = sharedPre.getString("tendn", null);
-
-        if (tendn != null) {
-            textTendn.setText(tendn);
-        } else {
-            Intent intent = new Intent(GioHang_Activity.this, Login_Activity.class);
-            startActivity(intent);
-            finish(); // Kết thúc activity nếu chưa đăng nhập
-            return;
-        }
-
-        txtTongTien = findViewById(R.id.tongtien); // Khởi tạo TextView cho tổng tiền
+    private void initializeDatabase() {
         database = new Database(this, "banhang.db", null, 1);
         database.QueryData("CREATE TABLE IF NOT EXISTS Dathang (" +
                 "id_dathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "tenkh TEXT, " +
-                "diachi TEXT, " +
-                "sdt TEXT, " +
-                "tongthanhtoan REAL, " +
-                "ngaydathang DATETIME DEFAULT CURRENT_TIMESTAMP);");
-
+                "tenkh TEXT, diachi TEXT, sdt TEXT, " +
+                "tongthanhtoan REAL, ngaydathang DATETIME DEFAULT CURRENT_TIMESTAMP);");
         gioHangManager = GioHangManager.getInstance();
         orderManager = new OrderManager(this);
+    }
 
-        // Lấy danh sách giỏ hàng và cập nhật giao diện
+    private void setupBackButton() {
+        ImageView backButton = findViewById(R.id.back);
+        backButton.setOnClickListener(v -> finish());
+    }
+
+    private void loadUsername() {
+        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String tendn = sharedPrefs.getString("tendn", null);
+
+        if (tendn != null) {
+            TextView textTendn = findViewById(R.id.tendn);
+            textTendn.setText(tendn);
+        } else {
+            navigateToLogin();
+        }
+    }
+
+    private void setupNavigationButtons() {
+        ImageButton btnCart = findViewById(R.id.btncart);
+        ImageButton btnHome = findViewById(R.id.btntrangchu);
+        ImageButton btnOrders = findViewById(R.id.btndonhang);
+        ImageButton btnProfile = findViewById(R.id.btncanhan);
+        ImageButton btnSearch = findViewById(R.id.btntimkiem);
+
+        btnCart.setOnClickListener(view -> checkLoginAndNavigate(GioHang_Activity.class));
+        btnHome.setOnClickListener(view -> navigateTo(TrangchuNgdung_Activity.class));
+        btnOrders.setOnClickListener(view -> checkLoginAndNavigate(DonHang_User_Activity.class));
+        btnProfile.setOnClickListener(view -> checkLoginAndNavigate(TrangCaNhan_nguoidung_Activity.class));
+        btnSearch.setOnClickListener(view -> navigateTo(TimKiemSanPham_Activity.class));
+    }
+
+    private void loadCartData() {
         List<GioHang> gioHangList = gioHangManager.getGioHangList();
         adapter = new GioHangAdapter(this, gioHangList, txtTongTien);
         listView.setAdapter(adapter);
-
-        // Cập nhật tổng tiền ngay từ giỏ hàng
         txtTongTien.setText(String.valueOf(gioHangManager.getTongTien()));
+    }
 
-        // Xử lý sự kiện click thanh toán
+    private void setupCheckoutButton() {
         thanhtoan.setOnClickListener(v -> showPaymentDialog());
-        btncard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //kiểm tra trạng thái đăng nhập của ng dùng
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-
-                if (!isLoggedIn) {
-                    // Chưa đăng nhập, chuyển đến trang login
-                    Intent intent = new Intent(getApplicationContext(),Login_Activity.class);
-                    startActivity(intent);
-                } else {
-                    // Đã đăng nhập, chuyển đến trang 2
-                    Intent intent = new Intent(getApplicationContext(), GioHang_Activity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-        btntrangchu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Đã đăng nhập, chuyển đến trang đơn hàng
-                Intent intent = new Intent(getApplicationContext(), TrangchuNgdung_Activity.class);
-
-                startActivity(intent);
-            }
-        });
-        btndonhang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Kiểm tra trạng thái đăng nhập của người dùng
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-
-                if (isLoggedIn) {
-                    // Đã đăng nhập, chuyển đến trang đơn hàng
-                    Intent intent = new Intent(getApplicationContext(), DonHang_User_Activity.class);
-
-                    // Truyền tendn qua Intent
-                    intent.putExtra("tendn", tendn);  // Thêm dòng này để truyền tendn
-
-                    startActivity(intent);
-                } else {
-                    // Chưa đăng nhập, chuyển đến trang login
-                    Intent intent = new Intent(getApplicationContext(), Login_Activity.class);
-                    startActivity(intent);
-                }
-            }
-
-        });
-        btncanhan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //kiểm tra trạng thái đăng nhập của ng dùng
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-
-                if (!isLoggedIn) {
-                    // Chưa đăng nhập, chuyển đến trang login
-                    Intent intent = new Intent(getApplicationContext(),Login_Activity.class);
-                    startActivity(intent);
-                } else {
-                    // Đã đăng nhập, chuyển đến trang 2
-                    Intent intent = new Intent(getApplicationContext(), TrangCaNhan_nguoidung_Activity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        btntimkiem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent a=new Intent(getApplicationContext(),TimKiemSanPham_Activity.class);
-                startActivity(a);
-            }
-        });
-
     }
 
     private void showPaymentDialog() {
@@ -160,63 +104,93 @@ public class GioHang_Activity extends AppCompatActivity {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.CENTER);
 
-        EditText edtTenKh = dialog.findViewById(R.id.tenkh);
+        setupPaymentDialog(dialog);
+        dialog.show();
+    }
+
+    private void setupPaymentDialog(Dialog dialog) {
+        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String tendn = sharedPrefs.getString("tendn", null);
+
         EditText edtDiaChi = dialog.findViewById(R.id.diachi);
         EditText edtSdt = dialog.findViewById(R.id.sdt);
-        Button btnLuu = dialog.findViewById(R.id.btnxacnhandathang);
+        Button btnConfirmOrder = dialog.findViewById(R.id.btnxacnhandathang);
         TextView tvTongTien = dialog.findViewById(R.id.tienthanhtoan);
 
-        String tongTien = txtTongTien.getText().toString();
-        tvTongTien.setText(tongTien);
+        String totalAmount = txtTongTien.getText().toString();
+        tvTongTien.setText(totalAmount);
 
-        btnLuu.setOnClickListener(v -> {
-            String tenKh = edtTenKh.getText().toString().trim();
-            String diaChi = edtDiaChi.getText().toString().trim();
-            String sdt = edtSdt.getText().toString().trim();
+        btnConfirmOrder.setOnClickListener(v -> {
+            if (edtDiaChi.getText().toString().trim().isEmpty() || edtSdt.getText().toString().trim().isEmpty()) {
+                showDialog("Vui lòng điền đầy đủ thông tin!");
+                return;
+            }
 
-            if (tenKh.isEmpty() || diaChi.isEmpty() || sdt.isEmpty()) {
-                Toast.makeText(this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-            } else {
-                float tongThanhToan;
-                try {
-                    tongThanhToan = Float.parseFloat(tongTien.replace(",", ""));
-                } catch (NumberFormatException e) {
-                    Toast.makeText(this, "Có lỗi xảy ra với tổng tiền!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (orderManager != null) {
-                    long orderId = orderManager.addOrder(tenKh, diaChi, sdt, tongThanhToan);
-                    if (orderId > 0) {
-                        // Lưu thông tin chi tiết đơn hàng
-                        List<GioHang> gioHangList = gioHangManager.getGioHangList();
-                        for (GioHang item : gioHangList) {
-                            String masp = item.getSanPham().getMasp();
-                            int soluong = item.getSoLuong();
-                            float dongia = item.getSanPham().getDongia();
-                            byte[] anhByteArray = item.getSanPham().getAnh();
-
-                            // Gọi phương thức addOrderDetails
-                            orderManager.addOrderDetails((int) orderId, masp, soluong, dongia, anhByteArray);
-                        }
-
-                        Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-                        gioHangManager.clearGioHang(); // Xóa giỏ hàng
-                        txtTongTien.setText("0"); // Đặt tổng tiền về 0
-
-                        adapter.notifyDataSetChanged(); // Cập nhật lại giao diện
-                        Intent a = new Intent(GioHang_Activity.this, TrangchuNgdung_Activity.class);
-                        startActivity(a);
-                    } else {
-                        Toast.makeText(this, "Đặt hàng thất bại!", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, "Không thể xử lý đơn hàng, hãy thử lại!", Toast.LENGTH_SHORT).show();
-                }
-                dialog.dismiss(); // Đóng dialog sau khi xử lý
+            try {
+                float finalTotal = Float.parseFloat(totalAmount.replace(",", ""));
+                processOrder(dialog, edtDiaChi.getText().toString().trim(), edtSdt.getText().toString().trim(), tendn, finalTotal);
+            } catch (NumberFormatException e) {
+                showDialog("Có lỗi xảy ra với tổng tiền!");
             }
         });
+    }
 
-        dialog.show();
+    private void processOrder(Dialog dialog, String address, String phone, String customerName, float totalAmount) {
+        long orderId = orderManager.addOrder(address, phone, customerName, totalAmount);
+        if (orderId > 0) {
+            saveOrderDetails(orderId);
+            showDialog("Đặt hàng thành công!");
+            clearCart();
+        } else {
+            showDialog("Đặt hàng thất bại!");
+        }
+        dialog.dismiss();
+    }
+
+    private void saveOrderDetails(long orderId) {
+        List<GioHang> cartItems = gioHangManager.getGioHangList();
+        for (GioHang item : cartItems) {
+            String productId = item.getSanPham().getMasp();
+            int quantity = item.getSoLuong();
+            float price = item.getSanPham().getDongia();
+            byte[] image = item.getSanPham().getAnh();
+
+            orderManager.addOrderDetails((int) orderId, productId, quantity, price, image);
+        }
+    }
+
+    private void clearCart() {
+        gioHangManager.clearGioHang();
+        txtTongTien.setText("0");
+        adapter.notifyDataSetChanged();
+    }
+
+    private void showDialog(String message) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void checkLoginAndNavigate(Class<?> activityClass) {
+        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPrefs.getBoolean("isLoggedIn", false);
+
+        if (isLoggedIn) {
+            navigateTo(activityClass);
+        } else {
+            navigateToLogin();
+        }
+    }
+
+    private void navigateTo(Class<?> activityClass) {
+        Intent intent = new Intent(getApplicationContext(), activityClass);
+        startActivity(intent);
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(GioHang_Activity.this, Login_Activity.class);
+        startActivity(intent);
+        finish();
     }
 }

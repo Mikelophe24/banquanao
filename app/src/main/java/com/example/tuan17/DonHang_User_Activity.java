@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,11 +19,23 @@ public class DonHang_User_Activity extends AppCompatActivity {
     private Database database;
     private ListView listView;
     private DonHang_Adapter donHangAdapter;
+    private String tendn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_don_hang_user);
+
+        ImageView backButton = findViewById(R.id.back);
+
+        // Thiết lập sự kiện onClick cho ImageView back
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Kết thúc Activity hiện tại và trở về màn hình trước
+            }
+        });
+
         ImageButton btntimkiem = findViewById(R.id.btntimkiem);
         ImageButton btntrangchu = findViewById(R.id.btntrangchu);
         ImageButton btncard = findViewById(R.id.btncart);
@@ -57,17 +70,25 @@ public class DonHang_User_Activity extends AppCompatActivity {
         // Tạo bảng nếu chưa tồn tại
         createTableIfNotExists();
 
-        // Lấy tên đăng nhập từ Intent
-        String tenDN = getIntent().getStringExtra("tendn");
+        // Lấy giá trị tendn từ SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        tendn = sharedPreferences.getString("tendn", null);
 
-// Kiểm tra giá trị tenDN
-        if (tenDN == null || tenDN.isEmpty()) {
-            Toast.makeText(this, "Tên đăng nhập không hợp lệ!", Toast.LENGTH_SHORT).show();
-            finish(); // Kết thúc activity nếu không có tên đăng nhập
+        // Nếu SharedPreferences không có, lấy từ Intent
+        if (tendn == null) {
+            tendn = getIntent().getStringExtra("tendn");
+        }
+
+        // Kiểm tra giá trị tendn
+        if (tendn == null) {
+            // Chưa đăng nhập, chuyển đến trang login
+            Intent intent = new Intent(DonHang_User_Activity.this, Login_Activity.class);
+            startActivity(intent);
+            finish(); // Kết thúc activity nếu chưa đăng nhập
             return;
         }
 
-        loadDonHang(tenDN); // Gọi phương thức loadDonHang với tenDN
+        loadDonHang(tendn); // Gọi phương thức loadDonHang với tenDN
 
         btncard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +177,7 @@ public class DonHang_User_Activity extends AppCompatActivity {
             return; // Dừng lại nếu tên khách hàng là null hoặc rỗng
         }
 
-        // Lấy danh sách đơn hàng từ cơ sở dữ liệu
+//         Lấy danh sách đơn hàng từ cơ sở dữ liệu
         List<Order> orders = database.getDonHangByTenKh(tenKh);
         if (orders.isEmpty()) {
             Toast.makeText(this, "Không tìm thấy đơn hàng cho khách hàng này!", Toast.LENGTH_SHORT).show();

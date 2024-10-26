@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList; // Import ArrayList
@@ -21,6 +23,16 @@ public class DanhMucSanPham_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danh_muc_san_pham);
+
+        ImageView backButton = findViewById(R.id.back);
+
+        // Thiết lập sự kiện onClick cho ImageView back
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Kết thúc Activity hiện tại và trở về màn hình trước
+            }
+        });
         ImageButton btntimkiem = findViewById(R.id.btntimkiem);
         ImageButton btntrangchu = findViewById(R.id.btntrangchu);
         ImageButton btncard = findViewById(R.id.btncart);

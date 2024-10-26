@@ -2,6 +2,7 @@ package com.example.tuan17;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class GioHangAdapter extends ArrayAdapter<GioHang> {
     private TextView txtTongTien; // Tham chiếu tới TextView tổng tiền
     private GioHangManager gioHangManager;
 
+
     public GioHangAdapter(Context context, List<GioHang> items, TextView txtTongTien) {
         super(context, 0, items);
         this.context = context;
@@ -31,6 +33,7 @@ public class GioHangAdapter extends ArrayAdapter<GioHang> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position; // Capture position
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.ds_giohang, parent, false);
         }
@@ -42,7 +45,10 @@ public class GioHangAdapter extends ArrayAdapter<GioHang> {
         TextView soLuong = convertView.findViewById(R.id.soluongdat);
         ImageButton btnGiam = convertView.findViewById(R.id.btnTru);
         ImageButton btnTang = convertView.findViewById(R.id.btnCong);
-        TextView xoasp = convertView.findViewById(R.id.xoasp);
+        ImageButton btndonhang = convertView.findViewById(R.id.btndonhang);
+//        TextView xoasp = convertView.findViewById(R.id.xoasp);
+        ImageButton xoasp = (ImageButton) convertView.findViewById(R.id.xoasp);
+
 
         GioHang item = items.get(position);
         tensp.setText(item.getSanPham().getTensp());
@@ -64,6 +70,20 @@ public class GioHangAdapter extends ArrayAdapter<GioHang> {
             notifyDataSetChanged();
             updateTongTien();
         });
+//        btndonhang.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //kiểm tra trạng thái đăng nhập của ng dùng
+//                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+//                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+//
+//                // Đã đăng nhập, chuyển đến trang đơn hàng
+//                Intent intent = new Intent(getApplicationContext(), DonHang_User_Activity.class);
+//
+//                startActivity(intent);
+//            }
+//
+//        });
 
         // Thiết lập sự kiện cho nút giảm số lượng
         btnGiam.setOnClickListener(v -> {
@@ -79,11 +99,10 @@ public class GioHangAdapter extends ArrayAdapter<GioHang> {
 
         // Thiết lập sự kiện cho TextView xoasp
         xoasp.setOnClickListener(v -> {
-            gioHangManager.removeItem(position); // Gọi phương thức xóa sản phẩm trong giỏ hàng
-            items.remove(position); // Xóa sản phẩm khỏi danh sách hiện tại
-            notifyDataSetChanged(); // Cập nhật giao diện
-            updateTongTien(); // Cập nhật tổng tiền
-            Toast.makeText(context, "Sản phẩm đã được xóa khỏi giỏ hàng", Toast.LENGTH_SHORT).show(); // Hiển thị thông báo
+            gioHangManager.removeItem(pos); // Use pos instead of position
+            notifyDataSetChanged();
+            updateTongTien();
+            Toast.makeText(context, "Sản phẩm đã được xóa khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
         });
 
 

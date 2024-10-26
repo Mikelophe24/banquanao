@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="THÊM ĐỊA CHỈ GIAO HÀNG"
+                android:text="THÊM THÔNG TIN GIAO HÀNG"
                 android:textSize="20sp"
 
                 android:textStyle="bold"
@@ -44,20 +44,20 @@
                 android:layout_marginBottom="5dp" />
 
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:id="@+id/tenkh"
-                android:background="@drawable/edittext"
-                android:layout_marginBottom="6dp"
-                android:drawablePadding="8dp"
-                android:hint="Tên Khách Hàng"
-                android:padding="8dp"
-                android:textColorHint="#aaa"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textColorHighlight="@color/cardview_dark_background"
-                android:layout_marginTop="3dp"/>
+<!--            <EditText-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="45dp"-->
+<!--                android:id="@+id/tennn"-->
+<!--                android:background="@drawable/edittext"-->
+<!--                android:layout_marginBottom="6dp"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="Tên Người Nhận"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColorHint="#aaa"-->
+<!--                android:inputType="text"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textColorHighlight="@color/cardview_dark_background"-->
+<!--                android:layout_marginTop="3dp"/>-->
 
             <EditText
                 android:layout_width="match_parent"

@@ -1,99 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    android:name="android.permission.SYSTEM_ALERT_WINDOW" xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Top toolbar with back button -->
     <LinearLayout
         android:id="@+id/bo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:backgroundTint="#B8B519"
-        android:layout_alignParentTop="true"
-        android:background="#F6F3EF"
+        android:background="#B8B519"
+        android:padding="8dp">
 
-        android:padding="1dp">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:backgroundTint="#B8B519"
-            android:layout_height="60dp">
+            android:layout_height="60dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ql"
+                android:contentDescription="Back Button" />
+
             <TextView
-                android:layout_marginLeft="1dp"
-                android:layout_weight="9"
-                android:gravity="center"
-                android:fontFamily="sans-serif-condensed-light"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:layout_gravity="center"
-                android:text="DANH SÁCH THÔNG TIN ĐƠN HÀNG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Danh Sách Thông Tin Đơn Hàng"
                 android:textColor="#FFFFFF"
-                android:src="@drawable/logo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"></TextView>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center" />
         </LinearLayout>
-
     </LinearLayout>
+
+    <!-- Order ListView -->
     <ListView
-        android:layout_marginTop="5dp"
-        android:layout_width="match_parent"
         android:id="@+id/listViewChiTiet"
-        android:layout_below="@+id/bo"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginRight="10dp"
-        android:layout_height="match_parent"></ListView>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/bo"
+        android:layout_above="@id/bottomToolbar"
+        android:layout_margin="10dp" />
 
-
-    <!-- Toolbar ở cuối màn hình -->
+    <!-- Bottom Navigation Toolbar -->
     <LinearLayout
         android:id="@+id/bottomToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
         android:background="#FFFFFF"
-        android:padding="1dp">
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
 
+        <!-- Home Button -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginRight="10dp"
             android:gravity="center">
-
             <ImageButton
                 android:id="@+id/btntrangchu"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#FFFFFF"
-                android:src="@drawable/tc" />
-
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/tc"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="Home Button" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:textColor="#000000"
                 android:text="Trang Chủ"
+                android:textColor="#000000"
                 android:gravity="center" />
         </LinearLayout>
 
+        <!-- Search Button -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginRight="10dp"
             android:gravity="center">
-
             <ImageButton
                 android:id="@+id/btntimkiem"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#FFFFFF"
-                android:src="@drawable/timkiem" />
-
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/timkiem"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="Search Button" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,21 +101,21 @@
                 android:textColor="#000000"
                 android:gravity="center" />
         </LinearLayout>
+
+        <!-- Cart Button -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginRight="10dp"
             android:gravity="center">
-
             <ImageButton
                 android:id="@+id/btncart"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#FFFFFF"
-                android:src="@drawable/cart" />
-
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/cart"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="Cart Button" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,51 +123,49 @@
                 android:textColor="#000000"
                 android:gravity="center" />
         </LinearLayout>
+
+        <!-- Orders Button -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginRight="10dp"
             android:gravity="center">
-
             <ImageButton
                 android:id="@+id/btndonhang"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#FFFFFF"
-                android:src="@drawable/dh" />
-
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/dh"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="Orders Button" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:textColor="#000000"
                 android:text="Đơn Hàng"
+                android:textColor="#000000"
                 android:gravity="center" />
         </LinearLayout>
 
+        <!-- Personal Button -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
-
             <ImageButton
                 android:id="@+id/btncanhan"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#FFFFFF"
-                android:src="@drawable/nd" />
-
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/nd"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="Personal Button" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
                 android:text="Cá Nhân"
+                android:textColor="#000000"
                 android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

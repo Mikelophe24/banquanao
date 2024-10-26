@@ -1,108 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Root CardView for modern appearance -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
 
-    <LinearLayout
+    <!-- Main container -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="16dp">
 
+        <!-- Product Image -->
         <ImageView
             android:id="@+id/imgsp"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="5dp"
-            android:background="@mipmap/ic_launcher_round"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher_round" />
 
-        <LinearLayout
+        <!-- Product Name -->
+        <TextView
+            android:id="@+id/tensp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp">
+            android:layout_toEndOf="@id/imgsp"
+            android:layout_marginStart="16dp"
+            android:text="Tên sản phẩm"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Product Price -->
+        <TextView
+            android:id="@+id/dongia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tensp"
+            android:layout_toEndOf="@id/imgsp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="₫0"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
+
+        <!-- Quantity Adjustment -->
+        <LinearLayout
+            android:id="@+id/quantityLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dongia"
+            android:layout_toEndOf="@id/imgsp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnTru"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_minus"
+                android:contentDescription="Decrease quantity"
+                app:tint="@color/colorPrimary" />
 
             <TextView
-                android:id="@+id/tensp"
+                android:id="@+id/soluongdat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tên sản phẩm"
-                android:textAllCaps="true"
-                android:textColor="#3AC315"
+                android:layout_marginHorizontal="16dp"
+                android:gravity="center"
+                android:text="0"
                 android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FF0000"
-                    android:textSize="15dp"
-                    android:layout_marginRight="3dp"
-                    android:text="đ" />
-
-                <TextView
-                    android:id="@+id/dongia"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FF0000"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/btnTru"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="#D8D8D8"
-                    android:src="@drawable/tru" />
-
-                <TextView
-                    android:id="@+id/soluongdat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:text="0" />
-
-                <ImageButton
-                    android:id="@+id/btnCong"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="#D8D8D8"
-                    android:src="@drawable/cong" />
-            </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnCong"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_plus"
+                android:contentDescription="Increase quantity"
+                app:tint="@color/colorPrimary" />
         </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <!-- Delete Button with Icon -->
+        <ImageButton
             android:id="@+id/xoasp"
-            android:text="Xóa"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete product"
+            app:tint="@color/colorAccent" />
 
-            android:textSize="10dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="40dp"
-            android:textStyle="bold"
-            android:textColor="#FF0000"
-            android:backgroundTint="#FF0000" />
-    </LinearLayout>
+        <!-- Hidden Product ID -->
+        <TextView
+            android:id="@+id/masp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/masp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-     />
-
-</LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
