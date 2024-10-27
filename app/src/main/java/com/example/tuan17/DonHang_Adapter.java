@@ -69,14 +69,19 @@ public class DonHang_Adapter extends ArrayAdapter<Order> {
     }
 
     private void cancelOrder(Order order) {
-        // Delete order from database
-        Database database = new Database(getContext(), "banhang.db", null, 1);
-        database.deleteOrderById(order.getId());
+        try {
+            // Delete order from database
+            Database database = new Database(getContext(), "banhang.db", null, 1);
+            database.deleteOrderById(order.getId());
 
-        // Remove the order from the list and update the adapter
-        remove(order);
-        notifyDataSetChanged();
+            // Remove the order from the list and update the adapter
+            remove(order);
+            notifyDataSetChanged();
 
-        Toast.makeText(getContext(), "Đơn hàng đã được hủy", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Đơn hàng đã được hủy", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Lỗi khi hủy đơn hàng: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -128,6 +128,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="200px"
-        android:text="Hủy Đơn Hàng" />
+        android:text="Hủy Đơn Hàng"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 </LinearLayout>

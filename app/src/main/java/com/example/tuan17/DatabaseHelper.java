@@ -36,13 +36,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS Chitietdonhang");
-
-        onCreate(db);
-        Log.d("DatabaseHelper", "Database upgraded from version " + oldVersion + " to " + newVersion);
+        if (oldVersion < 2) {
+            // Rename the existing table
+            db.execSQL("ALTER TABLE Chitietdathang RENAME TO Chitietdathang_old;");
+            // Create the new table with ON DELETE CASCADE
+            db.execSQL("CREATE TABLE Chitietdathang (" +
+                    "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "id_dathang INTEGER, " +
+                    "masp TEXT, " +
+                    "soluong INTEGER, " +
+                    "dongia REAL, " +
+                    "anh BLOB, " +
+                    "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang) ON DELETE CASCADE);");
+            // Copy data to the new table
+            db.execSQL("INSERT INTO Chitietdathang (id_dathang, masp, soluong, dongia, anh) " +
+                    "SELECT id_dathang, masp, soluong, dongia, anh FROM Chitietdathang_old;");
+            // Drop the old table
+            db.execSQL("DROP TABLE Chitietdathang_old;");
+        }
     }
-
-
 
     // Đổi mức truy cập của phương thức này thành public
 
@@ -124,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        return chiTietList; // Trả về danh sách chi tiết đơn hàng
+        return chiTietList; // Trả về danh sách chi tiết đơn hànggi tco
     }
 
     public String getTenSanPhamByMaSp(int masp) {

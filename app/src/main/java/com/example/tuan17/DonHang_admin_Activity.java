@@ -118,7 +118,7 @@ public class DonHang_admin_Activity extends AppCompatActivity {
         // Tạo bảng đơn hàng nếu chưa tồn tại
         database.QueryData("CREATE TABLE IF NOT EXISTS Dathang (" +
                 "id_dathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "tenkh TEXT, " +
+                "tenkh TEXT , " +
                 "diachi TEXT, " +
                 "sdt TEXT, " +
                 "tongthanhtoan REAL, " +

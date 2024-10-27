@@ -41,16 +41,17 @@ public class Database extends SQLiteOpenHelper {
 
 
 
-
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
     public void deleteOrderById(int orderId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        // Delete from Dathang table
+        db.delete("Chitietdathang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
         db.delete("Dathang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
-        // Also, delete associated details from Chitietdathang table if necessary
-        db.delete("Chitietdonhang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
         db.close();
     }
-
 
     @Override
     public void onOpen(SQLiteDatabase db) {
@@ -102,6 +103,7 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create Dathang table
@@ -121,7 +123,7 @@ public class Database extends SQLiteOpenHelper {
                 "soluong INTEGER, " +
                 "dongia REAL, " +
                 "anh BLOB, " +
-                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang));");
+                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang) ON DELETE CASCADE);");
 
         // Create other tables as needed
     }
@@ -158,7 +160,7 @@ public class Database extends SQLiteOpenHelper {
         Cursor cursor = null;
 
         try {
-            String query = "SELECT * FROM Dathang";
+            String query = "SELECT * FROM Dathang where tenkh = 'triminh' ";
             cursor = db.rawQuery(query, null); // Cần đối số thứ 2 là null
 
             if (cursor != null && cursor.moveToFirst()) {

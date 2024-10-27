@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 public class DonHang_User_Activity extends AppCompatActivity {
     private Database database;
@@ -159,6 +161,7 @@ public class DonHang_User_Activity extends AppCompatActivity {
             }
         });
     }
+
 
     private void createTableIfNotExists() {
         // Tạo bảng đơn hàng nếu chưa tồn tại
