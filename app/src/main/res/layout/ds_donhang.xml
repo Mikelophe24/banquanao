@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     android:background="@drawable/listviewdh"
     android:padding="16dp">
     <!-- Ngày Đặt Hàng -->
@@ -17,11 +18,13 @@
             android:textSize="14sp"
             android:textColor="#0C96F3"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/txtMahd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp" />
+
     </LinearLayout>
     <!-- Tên Khách Hàng -->
     <LinearLayout
@@ -120,5 +123,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp" />
     </LinearLayout>
+    <Button
+        android:id="@+id/btnCancelOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200px"
+        android:text="Hủy Đơn Hàng" />
 
 </LinearLayout>

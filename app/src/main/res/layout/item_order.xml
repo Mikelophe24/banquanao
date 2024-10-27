@@ -3,20 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:background="#F6F3EF"
-    android:gravity="center_vertical">
+    android:padding="8dp">
 
-    <!-- Display Order Details -->
+    <!-- Order Details -->
     <TextView
-        android:id="@+id/tvOrderDetails"
+        android:id="@+id/order_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="8dp"
         android:text="Order Details"
         android:textSize="16sp"
         android:textColor="#000000" />
 
+    <!-- Cancel Order Button -->
 
 </LinearLayout>

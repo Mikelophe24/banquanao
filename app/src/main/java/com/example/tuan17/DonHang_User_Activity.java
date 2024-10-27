@@ -50,6 +50,7 @@ public class DonHang_User_Activity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (view.getId() != R.id.btnCancelOrder) {
                 Order order = donHangAdapter.getItem(position);
 
                 if (order != null) {
@@ -61,7 +62,7 @@ public class DonHang_User_Activity extends AppCompatActivity {
                     intent.putExtra("donHangId", String.valueOf(order.getId())); // Đảm bảo rằng ID là chuỗi
                     startActivity(intent);
                 }
-            }
+            }}
 
 
         });
@@ -186,5 +187,11 @@ public class DonHang_User_Activity extends AppCompatActivity {
             donHangAdapter = new DonHang_Adapter(this, orders);
             listView.setAdapter(donHangAdapter); // Gán adapter cho ListView
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload the orders when the activity resumes
+        loadDonHang(tendn);
     }
 }

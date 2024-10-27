@@ -42,7 +42,7 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
         dbdata = new DatabaseHelper(this);
         database = new Database(this, "banhang.db", null, 1);
 
-        createTableIfNotExists();
+//        createTableIfNotExists();
 
         // Khởi tạo ListView để hiển thị chi tiết đơn hàng
         listViewChiTiet = findViewById(R.id.listtk); // Đảm bảo rằng bạn đã định nghĩa ListView trong layout
@@ -150,15 +150,15 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
         });
     }
 
-    private void createTableIfNotExists() {
-        // Tạo bảng Chitietdonhang nếu chưa tồn tại
-        database.QueryData("CREATE TABLE IF NOT EXISTS Chitietdonhang (" +
-                "id_chitiet INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_dathang INTEGER, " +
-                "masp INTEGER, " +
-                "soluong INTEGER, " +
-                "dongia REAL, " +
-                "anh TEXT, " +
-                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang));");
-    }
+//    private void createTableIfNotExists() {
+//        // Tạo bảng Chitietdonhang nếu chưa tồn tại
+//        db.execSQL("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
+//                "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                "id_dathang INTEGER, " +
+//                "masp TEXT, " +
+//                "soluong INTEGER, " +
+//                "dongia REAL, " +
+//                "anh BLOB, " +
+//                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang));");
+//    }
 }

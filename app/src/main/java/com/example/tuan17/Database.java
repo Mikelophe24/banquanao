@@ -38,6 +38,27 @@ public class Database extends SQLiteOpenHelper {
         statement.executeInsert(); // Hoặc executeUpdate/Delete tùy thuộc vào câu lệnh
         database.close();
     }
+
+
+
+
+    public void deleteOrderById(int orderId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete from Dathang table
+        db.delete("Dathang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
+        // Also, delete associated details from Chitietdathang table if necessary
+        db.delete("Chitietdonhang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
+        db.close();
+    }
+
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
     //truy vấn có kết quả
     public Cursor GetData(String sql){
         SQLiteDatabase database=getReadableDatabase();
@@ -64,16 +85,47 @@ public class Database extends SQLiteOpenHelper {
         db.delete("nhomsanpham", "maso = ?", new String[]{maSo});
         db.close();
     }
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            // Create Chitietdathang table if upgrading from version 1 to 2
+            db.execSQL("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
+                    "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "id_dathang INTEGER, " +
+                    "masp TEXT, " +
+                    "soluong INTEGER, " +
+                    "dongia REAL, " +
+                    "anh BLOB, " +
+                    "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang));");
+        }
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS nhomsanpham ("
-                + "maso INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "tennsp NVARCHAR(200), "
-                + "anh BLOB)");
+        // Create Dathang table
+        db.execSQL("CREATE TABLE IF NOT EXISTS Dathang (" +
+                "id_dathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "tenkh TEXT, " +
+                "diachi TEXT, " +
+                "sdt TEXT, " +
+                "tongthanhtoan REAL, " +
+                "ngaydathang DATETIME DEFAULT CURRENT_TIMESTAMP);");
+
+        // Create Chitietdathang table
+        db.execSQL("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
+                "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id_dathang INTEGER, " +
+                "masp TEXT, " +
+                "soluong INTEGER, " +
+                "dongia REAL, " +
+                "anh BLOB, " +
+                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang));");
+
+        // Create other tables as needed
     }
+
 
     public List<Order> getDonHangByTenKh(String tenKh) {
         List<Order> orders = new ArrayList<>();

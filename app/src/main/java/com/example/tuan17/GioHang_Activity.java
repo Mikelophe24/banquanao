@@ -50,8 +50,11 @@ public class GioHang_Activity extends AppCompatActivity {
         database = new Database(this, "banhang.db", null, 1);
         database.QueryData("CREATE TABLE IF NOT EXISTS Dathang (" +
                 "id_dathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "tenkh TEXT, diachi TEXT, sdt TEXT, " +
-                "tongthanhtoan REAL, ngaydathang DATETIME DEFAULT CURRENT_TIMESTAMP);");
+                "tenkh TEXT, " +
+                "diachi TEXT, " +
+                "sdt TEXT, " +
+                "tongthanhtoan REAL, " +
+                "ngaydathang DATETIME DEFAULT CURRENT_TIMESTAMP);");
         gioHangManager = GioHangManager.getInstance();
         orderManager = new OrderManager(this);
     }
