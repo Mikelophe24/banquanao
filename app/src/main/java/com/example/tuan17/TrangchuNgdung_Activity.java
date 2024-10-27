@@ -1,20 +1,16 @@
 package com.example.tuan17;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +72,7 @@ public class TrangchuNgdung_Activity extends AppCompatActivity {
         btntrangchu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TrangchuNgdung_Activity.this, DonHang_User_Activity.class);
+                Intent intent = new Intent(TrangchuNgdung_Activity.this, TrangchuNgdung_Activity.class);
                 // Gửi tên đăng nhập qua Intent
                 intent.putExtra("tendn", tendn); // sử dụng biến tendn đã được xác nhận
                 startActivity(intent);
@@ -142,7 +138,7 @@ public class TrangchuNgdung_Activity extends AppCompatActivity {
         database = new Database(this, "banhang.db", null, 1);
 
         Loaddulieubacsigridview2();
-        Loaddulieubacsigridview1();
+        LoaddulieuSanPham();
     }
 
     private void Loaddulieubacsigridview2() {
@@ -159,8 +155,8 @@ public class TrangchuNgdung_Activity extends AppCompatActivity {
         adapterGrv2.notifyDataSetChanged(); // Cập nhật adapter
     }
 
-    private void Loaddulieubacsigridview1() {
-        Cursor cursor = database.GetData("SELECT * FROM sanpham order by random() limit 8");
+    private void LoaddulieuSanPham() {
+        Cursor cursor = database.GetData("SELECT * FROM sanpham where tensp like 'ao%';");
         mangSPgrv1.clear();
 
         if (cursor != null && cursor.moveToFirst()) {

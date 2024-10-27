@@ -108,10 +108,10 @@ public class TrangchuAdmin_Activity extends AppCompatActivity {
 
         database = new Database(this, "banhang.db", null, 1);
 
-        Loaddulieubacsigridview2();
-        Loaddulieubacsigridview1();
+        LoaddulieunhomSP();
+        Loaddulieusanpham();
     }
-    private void Loaddulieubacsigridview2() {
+    private void LoaddulieunhomSP() {
         Cursor dataCongViec = database.GetData("SELECT * from nhomsanpham order by random() limit 10 ");
         mangNSPgrv2.clear();
 
@@ -126,8 +126,8 @@ public class TrangchuAdmin_Activity extends AppCompatActivity {
         adapterGrv2.notifyDataSetChanged(); // Cập nhật adapter
     }
 
-    private void Loaddulieubacsigridview1() {
-        Cursor cursor = database.GetData("SELECT * FROM sanpham order by random() limit 8");
+    private void Loaddulieusanpham() {
+        Cursor cursor = database.GetData("SELECT * FROM sanpham where tensp like 'ao%';");
         mangSPgrv1.clear();
 
         if (cursor != null && cursor.moveToFirst()) {

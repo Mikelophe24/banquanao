@@ -42,7 +42,7 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
         dbdata = new DatabaseHelper(this);
         database = new Database(this, "banhang.db", null, 1);
 
-     createTableIfNotExists();
+//     createTableIfNotExists();
 
         // Khởi tạo ListView để hiển thị chi tiết đơn hàng
         listViewChiTiet = findViewById(R.id.listtk); // Đảm bảo rằng bạn đã định nghĩa ListView trong layout
@@ -90,7 +90,7 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
 
                 if (!isLoggedIn) {
                     // Chưa đăng nhập, chuyển đến trang login
-                    Intent intent = new Intent(getApplicationContext(),Login_Activity.class);
+                    Intent intent = new Intent(getApplicationContext(), Login_Activity.class);
                     startActivity(intent);
                 } else {
                     // Đã đăng nhập, chuyển đến trang 2
@@ -131,7 +131,7 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
 
                 if (!isLoggedIn) {
                     // Chưa đăng nhập, chuyển đến trang login
-                    Intent intent = new Intent(getApplicationContext(),Login_Activity.class);
+                    Intent intent = new Intent(getApplicationContext(), Login_Activity.class);
                     startActivity(intent);
                 } else {
                     // Đã đăng nhập, chuyển đến trang 2
@@ -144,19 +144,11 @@ public class ChiTietDonHang_Activity extends AppCompatActivity {
         btntimkiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent a=new Intent(getApplicationContext(),TimKiemSanPham_Activity.class);
+                Intent a = new Intent(getApplicationContext(), TimKiemSanPham_Activity.class);
                 startActivity(a);
             }
         });
     }
+}
 
-    private void createTableIfNotExists() {
-        database.QueryData("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
-                "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_dathang INTEGER, " +
-                "masp TEXT, " +
-                "soluong INTEGER, " +
-                "dongia REAL, " +
-                "anh BLOB, " +
-                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang) ON DELETE CASCADE);");
-}}
+

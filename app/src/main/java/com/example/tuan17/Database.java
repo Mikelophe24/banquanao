@@ -48,7 +48,7 @@ public class Database extends SQLiteOpenHelper {
     }
     public void deleteOrderById(int orderId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("Chitietdathang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
+        db.delete("Chitietdonhang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
         db.delete("Dathang", "id_dathang = ?", new String[]{String.valueOf(orderId)});
         db.close();
     }
@@ -88,20 +88,7 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            // Create Chitietdathang table if upgrading from version 1 to 2
-            db.execSQL("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
-                    "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "id_dathang INTEGER, " +
-                    "masp TEXT, " +
-                    "soluong INTEGER, " +
-                    "dongia REAL, " +
-                    "anh BLOB, " +
-                    "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang));");
-        }
-    }
+
 
 
     @Override
@@ -116,16 +103,21 @@ public class Database extends SQLiteOpenHelper {
                 "ngaydathang DATETIME DEFAULT CURRENT_TIMESTAMP);");
 
         // Create Chitietdathang table
-        db.execSQL("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
-                "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_dathang INTEGER, " +
-                "masp TEXT, " +
-                "soluong INTEGER, " +
-                "dongia REAL, " +
-                "anh BLOB, " +
-                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang) ON DELETE CASCADE);");
+//        db.execSQL("CREATE TABLE IF NOT EXISTS Chitietdathang (" +
+//                "id_chitietdathang INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//                "id_dathang INTEGER, " +
+//                "masp TEXT, " +
+//                "soluong INTEGER, " +
+//                "dongia REAL, " +
+//                "anh BLOB, " +
+//                "FOREIGN KEY(id_dathang) REFERENCES Dathang(id_dathang) ON DELETE CASCADE);");
 
         // Create other tables as needed
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
     }
 
 
@@ -160,9 +152,9 @@ public class Database extends SQLiteOpenHelper {
         Cursor cursor = null;
 
         try {
-            String query = "SELECT * FROM Dathang where tenkh = 'triminh' ";
+            String query = "SELECT * FROM Dathang ";
             cursor = db.rawQuery(query, null); // Cần đối số thứ 2 là null
-
+    
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     int id = cursor.getInt(0); // id_dathang
